@@ -1,0 +1,36 @@
+<header
+  class="bg-neutral sticky top-4 container mx-auto rounded-full shadow-md py-2 md:px-10 px-3 flex justify-between items-center"
+>
+  <a routerLink="/" class="flex items-center gap-2">
+    <img src="logo.png" alt="Logo" class="w-10 h-10" />
+  </a>
+
+  <div *ngIf="isAuthenticated" class="flex gap-4 items-center">
+    <a routerLink="/cart" class="relative">
+      <img src="cart.svg" alt="Cart" />
+      <span
+        class="absolute w-[20px] -top-2 grid place-items-center h-fit rounded-full -right-2 text-sm text-white bg-black h-fit-content"
+      >
+        {{ cartItemsLength | async }}
+      </span>
+    </a>
+    <h5 class="text-neutral-inverted font-bold">
+      {{ userDetails?.firstName }} {{ userDetails?.lastName }}
+    </h5>
+    <button
+      (click)="logout()"
+      class="text-neutral bg-neutral-inverted btn-secondary"
+    >
+      Logout
+    </button>
+  </div>
+
+  <nav class="flex gap-4 items-center" *ngIf="!isAuthenticated">
+    <a
+      routerLink="/login"
+      class="text-neutral bg-neutral-inverted btn-secondary"
+    >
+      Login
+    </a>
+  </nav>
+</header>

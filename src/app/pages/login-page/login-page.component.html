@@ -1,0 +1,39 @@
+<main class="page-wrapper flex items-center justify-center">
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-md w-full max-w-[500px] mx-auto"
+  >
+    <label for="Username">
+      <span class="font-medium text-gray-700 dark:text-gray-200">
+        Username
+      </span>
+      <input
+        type="text"
+        id="Username"
+        formControlName="username"
+        class="mt-0.5 w-full rounded text-black border-gray-300 shadow-sm"
+      />
+      <div class="text-red-400" *ngIf="username?.invalid && username?.touched">
+        Name is required.
+      </div>
+    </label>
+    <label form="Password">
+      <span class="font-medium text-gray-700 dark:text-gray-200">
+        Password
+      </span>
+      <input
+        type="password"
+        id="Password"
+        formControlName="password"
+        class="mt-0.5 w-full rounded text-black border-gray-300 shadow-sm"
+      />
+      <div class="text-red-400" *ngIf="password?.invalid && password?.touched">
+        Password is required.
+      </div>
+    </label>
+    <button type="submit" class="btn-outline mt-lg" [disabled]="isSubmitting">
+      Login
+    </button>
+  </form>
+</main>

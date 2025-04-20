@@ -1,0 +1,79 @@
+<main class="page-wrapper !py-10">
+  <ng-container *ngIf="product$ | async as productState">
+    <div *ngIf="productState.isLoading" class="text-center text-neutral">
+      Loading...
+    </div>
+
+    <div
+      *ngIf="!productState.isLoading && productState.results as product"
+      class="grid grid-cols-1 md:grid-cols-2 gap-8"
+    >
+      <!-- Left Column - Product Images -->
+      <div class="flex flex-col items-center">
+        <div
+          class="bg-neutral w-full h-[400px] shadow-md rounded-lg overflow-hidden"
+        >
+          <img
+            [src]="product.thumbnail"
+            alt="Product Image"
+            class="w-full h-full"
+          />
+        </div>
+        <div class="flex gap-2 mt-4">
+          <div
+            class="bg-primary-500 w-16 h-16 rounded-md flex items-center justify-center cursor-pointer"
+          >
+            <img
+              *ngFor="let img of product.images"
+              [src]="img"
+              alt="Thumbnail"
+              class="w-16 h-16 object-cover rounded-md cursor-pointer"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Product Details -->
+      <div class="space-y-4">
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.description }}</p>
+
+        <div class="flex items-center gap-4">
+          <span class="font-medium"> ${{ product.price }} </span>
+          <span
+            class="bg-primary-500 text-neutral-inverted px-2 py-1 rounded-md"
+          >
+            -{{ product.discountPercentage }}% OFF
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span>⭐ {{ product.rating }}</span>
+          <span>({{ product.reviews.length }} reviews)</span>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="text-sm"><b>Brand:</b> {{ product.brand }}</p>
+          <p class="text-sm">
+            <b>Stock:</b>
+            {{ product.stock > 0 ? "Available" : "Out of stock" }}
+          </p>
+        </div>
+
+        <button
+          (click)="addToCart(product)"
+          class="bg-black text-neutral px-6 py-2 rounded-md shadow-md hover:bg-primary-600 transition"
+        >
+          Add to Cart
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="!productState.isLoading && !productState.results"
+      class="text-center text-red-500"
+    >
+      Product not found.
+    </div>
+  </ng-container>
+</main>

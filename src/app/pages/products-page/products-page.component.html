@@ -1,0 +1,21 @@
+<main class="page-wrapper">
+  <h3 class="text-primary-accent pb-2">Get inspired</h3>
+  <app-filters />
+  <div *ngIf="products$ | async as products">
+    <div *ngIf="products.isLoading" class="text-center mt-6">loading...</div>
+    <div *ngIf="!products.isLoading">
+      <ng-container *ngIf="products.list?.length; else noProducts">
+        <div class="products-grid mt-6">
+          <app-product-card
+            *ngFor="let product of products.list"
+            [product]="product"
+          />
+        </div>
+      </ng-container>
+
+      <ng-template #noProducts>
+        <div class="text-center mt-6">No products found</div>
+      </ng-template>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,197 @@
+<main class="page-wrapper !py-10">
+  <h1 class="mb-8">Your Shopping Cart</h1>
+
+  <ng-container *ngIf="cartItems$ | async as items">
+    <div
+      *ngIf="items.length === 0"
+      class="text-center py-12 bg-gray-50 rounded-lg"
+    >
+      <div class="mx-auto max-w-md">
+        <h2 class="text-lg font-medium text-gray-900">Your cart is empty</h2>
+        <p class="mt-1 text-gray-500">
+          Start adding some products to your cart
+        </p>
+        <a
+          routerLink="/products"
+          class="mt-6 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="items.length > 0" class="grid grid-cols-12 w-full gap-md">
+      <div class="col-span-8">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <ul class="divide-y divide-gray-200">
+            <li *ngFor="let item of items" class="p-4">
+              <div class="flex flex-col sm:flex-row gap-md">
+                <div
+                  class="flex-shrink-0 w-32 h-32 bg-gray-200 rounded-md overflow-hidden"
+                >
+                  <img
+                    [src]="item.thumbnail"
+                    [alt]="item.title"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+
+                <div class="flex-1">
+                  <div class="flex justify-between">
+                    <div class="pr-4">
+                      <h3 class="text-lg font-medium text-gray-900">
+                        <a
+                          [routerLink]="['/products', item.id]"
+                          class="hover:text-indigo-600"
+                        >
+                          {{ item.title }}
+                        </a>
+                      </h3>
+                      <p class="mt-1 text-sm text-gray-500">
+                        SKU: {{ item.id }}
+                      </p>
+                    </div>
+                    <p class="text-lg font-medium text-gray-900">
+                      ${{
+                        item.price * (1 - item.discountPercentage / 100)
+                          | number : "1.2-2"
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="sm:mt-6 flex items-center">
+                    <div
+                      class="flex items-center border border-gray-300 rounded-md"
+                    >
+                      <button
+                        (click)="updateQuantity(item, item.quantity - 1)"
+                        class="px-sm py-sm text-gray-600 hover:text-gray-800 focus:outline-none"
+                        [disabled]="item.quantity <= 1"
+                      >
+                        <span class="sr-only">Decrease quantity</span>
+                        <svg
+                          class="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M20 12H4"
+                          />
+                        </svg>
+                      </button>
+                      <span
+                        class="px-sm py-sm text-sm font-medium text-neutral-inverted"
+                        >{{ item.quantity }}</span
+                      >
+                      <button
+                        (click)="updateQuantity(item, item.quantity + 1)"
+                        class="px-sm py-sm text-gray-600 hover:text-gray-800 focus:outline-none"
+                      >
+                        <span class="sr-only">Increase quantity</span>
+                        <svg
+                          class="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <button
+                      (click)="removeItem(item.id)"
+                      type="button"
+                      class="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            (click)="clearCart()"
+            type="button"
+            class="text-sm font-medium text-red-600 hover:text-red-500"
+          >
+            Clear cart
+          </button>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
+
+            <ng-container *ngIf="cartTotal$ | async as totals">
+              <div class="mt-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <dt class="text-sm text-gray-600">Subtotal</dt>
+                  <dd class="text-sm font-medium text-gray-900">
+                    ${{ totals.subtotal | number : "1.2-2" }}
+                  </dd>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <dt class="text-sm text-gray-600">Discount</dt>
+                  <dd class="text-sm font-medium text-green-600">
+                    -${{ totals.discount | number : "1.2-2" }}
+                  </dd>
+                </div>
+
+                <div
+                  class="flex items-center justify-between border-t border-gray-200 pt-4"
+                >
+                  <dt class="text-base font-medium text-gray-900">
+                    Order total
+                  </dt>
+                  <dd class="text-base font-medium text-gray-900">
+                    ${{ totals.total | number : "1.2-2" }}
+                  </dd>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="mt-6">
+              <button
+                type="button"
+                class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Checkout
+              </button>
+            </div>
+
+            <div
+              class="mt-6 flex justify-center text-sm text-center text-gray-500"
+            >
+              <p>
+                or
+                <a
+                  routerLink="/products"
+                  class="text-indigo-600 font-medium hover:text-indigo-500 ml-1"
+                >
+                  Continue Shopping<span aria-hidden="true"> &rarr;</span>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</main>

@@ -1,0 +1,7 @@
+.app-wrapper {
+  background: var(--primary-800);
+  background-size: cover;
+  height: 100%;
+  padding: var(--spacing-md) 0;
+  color: var(--primary-accent);
+}

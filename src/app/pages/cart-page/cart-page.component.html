@@ -25,108 +25,20 @@
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
           <ul class="divide-y divide-gray-200">
             <li *ngFor="let item of items" class="p-4">
-              <div class="flex flex-col sm:flex-row gap-md">
-                <div
-                  class="flex-shrink-0 w-32 h-32 bg-gray-200 rounded-md overflow-hidden"
-                >
-                  <img
-                    [src]="item.thumbnail"
-                    [alt]="item.title"
-                    class="w-full h-full object-cover object-center"
-                  />
-                </div>
-
-                <div class="flex-1">
-                  <div class="flex justify-between">
-                    <div class="pr-4">
-                      <h3 class="text-lg font-medium text-gray-900">
-                        <a
-                          [routerLink]="['/products', item.id]"
-                          class="hover:text-indigo-600"
-                        >
-                          {{ item.title }}
-                        </a>
-                      </h3>
-                      <p class="mt-1 text-sm text-gray-500">
-                        SKU: {{ item.id }}
-                      </p>
-                    </div>
-                    <p class="text-lg font-medium text-gray-900">
-                      ${{
-                        item.price * (1 - item.discountPercentage / 100)
-                          | number : "1.2-2"
-                      }}
-                    </p>
-                  </div>
-
-                  <div class="sm:mt-6 flex items-center">
-                    <div
-                      class="flex items-center border border-gray-300 rounded-md"
-                    >
-                      <button
-                        (click)="updateQuantity(item, item.quantity - 1)"
-                        class="px-sm py-sm text-gray-600 hover:text-gray-800 focus:outline-none"
-                        [disabled]="item.quantity <= 1"
-                      >
-                        <span class="sr-only">Decrease quantity</span>
-                        <svg
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M20 12H4"
-                          />
-                        </svg>
-                      </button>
-                      <span
-                        class="px-sm py-sm text-sm font-medium text-neutral-inverted"
-                        >{{ item.quantity }}</span
-                      >
-                      <button
-                        (click)="updateQuantity(item, item.quantity + 1)"
-                        class="px-sm py-sm text-gray-600 hover:text-gray-800 focus:outline-none"
-                      >
-                        <span class="sr-only">Increase quantity</span>
-                        <svg
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <button
-                      (click)="removeItem(item.id)"
-                      type="button"
-                      class="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <app-cart-item
+                [item]="item"
+                (quantityChange)="updateQuantity($event)"
+                (removeItem)="removeItem($event)"
+              />
             </li>
           </ul>
         </div>
 
-        <div class="flex justify-end">
+        <div class="flex justify-end mt-lg">
           <button
             (click)="clearCart()"
             type="button"
-            class="text-sm font-medium text-red-600 hover:text-red-500"
+            class="btn-danger rounded-md py-sm"
           >
             Clear cart
           </button>

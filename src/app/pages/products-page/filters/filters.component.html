@@ -1,22 +1,28 @@
-<div class="flex gap-1">
-  <button
-    class="btn py-1 px-5 hover:bg-neutral focus:bg-neutral hover:text-neutral-inverted focus:text-neutral-inverted bg-primary-400 rounded-full"
-  >
-    All
-  </button>
-  <button
-    class="btn py-1 px-5 hover:bg-neutral focus:bg-neutral hover:text-neutral-inverted focus:text-neutral-inverted bg-primary-400 rounded-full"
-  >
-    Furniture
-  </button>
-  <button
-    class="btn py-1 px-5 hover:bg-neutral focus:bg-neutral hover:text-neutral-inverted focus:text-neutral-inverted bg-primary-400 rounded-full"
-  >
-    Lighting
-  </button>
-  <button
-    class="btn py-1 px-5 hover:bg-neutral focus:bg-neutral hover:text-neutral-inverted focus:text-neutral-inverted bg-primary-400 rounded-full"
-  >
-    Accessories
-  </button>
+<div class="mb-4">
+  <div *ngIf="isLoading" class="text-center py-2">Loading categories...</div>
+
+  <div *ngIf="!isLoading" class="flex flex-wrap gap-2">
+    <button
+      (click)="filterByCategory(null)"
+      class="btn py-1 px-4 rounded-full"
+      [class.bg-primary-500]="selectedCategory === null"
+      [class.text-white]="selectedCategory === null"
+      [class.bg-gray-100]="selectedCategory !== null"
+      [class.hover:bg-gray-200]="selectedCategory !== null"
+    >
+      All
+    </button>
+
+    <button
+      *ngFor="let category of categories$ | async"
+      (click)="filterByCategory(category)"
+      class="btn py-1 px-4 rounded-full"
+      [class.bg-primary-500]="selectedCategory === category"
+      [class.text-white]="selectedCategory === category"
+      [class.bg-gray-100]="selectedCategory !== category"
+      [class.hover:bg-gray-200]="selectedCategory !== category"
+    >
+      {{ category | titlecase }}
+    </button>
+  </div>
 </div>

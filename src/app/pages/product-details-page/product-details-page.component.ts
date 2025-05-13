@@ -42,23 +42,13 @@ export class ProductDetailsPageComponent implements OnInit {
     this.cartService.addToCart(product, 1).subscribe({
       next: (response) => {
         if (response.results) {
-          this.cartService.updateLocalCart([
-            {
-              id: product.id,
-              quantity: 1,
-              title: product.title,
-              price: product.price,
-              thumbnail: product.thumbnail,
-              discountPercentage: product.discountPercentage,
-              total: product.price * 1,
-              discountedTotal:
-                product.price * 1 * (1 - product.discountPercentage / 100),
-            },
-          ]);
+          alert('Product added to cart successfully!');
+        } else if (response.error) {
+          alert('Error adding product to cart: ' + response.error);
         }
       },
       error: (error) => {
-        alert(error);
+        alert('Error adding product to cart: ' + error);
       },
     });
   }

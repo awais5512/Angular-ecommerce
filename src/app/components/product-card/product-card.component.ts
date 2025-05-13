@@ -16,7 +16,11 @@ export class ProductCardComponent {
   addToCart() {
     this.cartService.addToCart(this.product).subscribe({
       next: (response) => {
-        alert('Product added to cart successfully!');
+        if (response.results) {
+          alert('Product added to cart successfully!');
+        } else if (response.error) {
+          alert('Error adding product to cart: ' + response.error);
+        }
       },
       error: (error) => {
         alert('Error adding product to cart: ' + error);

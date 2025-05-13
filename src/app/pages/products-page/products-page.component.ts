@@ -1,4 +1,4 @@
-import { map, Observable } from 'rxjs';
+import { distinctUntilChanged, map, Observable, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
@@ -23,7 +23,13 @@ export class ProductsPageComponent implements OnInit {
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.products$ = this.productService.getProducts().pipe(
+    this.products$ = this.productService.filters$.pipe(
+      distinctUntilChanged((prev, curr) => {
+        return JSON.stringify(prev) === JSON.stringify(curr);
+      }),
+      switchMap((filters) => {
+        return this.productService.getProducts(filters, false);
+      }),
       map((response) => {
         return {
           list: response.results?.products || null,
@@ -32,5 +38,7 @@ export class ProductsPageComponent implements OnInit {
         };
       })
     );
+
+    this.productService.getProducts();
   }
 }

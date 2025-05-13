@@ -70,6 +70,10 @@ html {
     @apply btn text-neutral-inverted hover:bg-primary-400 bg-primary-500 rounded-full;
   }
 
+  .btn-danger {
+    @apply btn text-white hover:bg-red-500 bg-red-600 rounded-full;
+  }
+
   .btn-outline {
     @apply btn border border-primary-500 text-neutral hover:text-neutral-inverted hover:bg-primary-500;
   }

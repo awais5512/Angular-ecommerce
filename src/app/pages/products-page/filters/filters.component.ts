@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '@app/services/product.service';
-import { Observable, map } from 'rxjs';
+import { Category, ProductService } from '@app/services/product.service';
+import { Observable, catchError, map, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,44 +12,26 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './filters.component.css',
 })
 export class FiltersComponent implements OnInit {
-  categories$!: Observable<string[]>;
+  categories$!: Observable<Category[]>;
   selectedCategory: string | null = null;
   searchQuery: string = '';
-  isLoading = false;
+  isLoading = true;
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.isLoading = true;
 
-    this.categories$ = this.productService.getCategories().pipe(
-      map((response) => {
+    this.productService.getCategories().subscribe({
+      next: (response) => {
+        this.categories$ = of(response.results || []);
         this.isLoading = false;
-        return response.results || [];
-      })
-    );
-
-    this.productService.filters$.subscribe((filters) => {
-      this.selectedCategory = filters.category || null;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+        this.categories$ = of([]);
+        this.isLoading = false;
+      },
     });
-  }
-
-  filterByCategory(category: string | null): void {
-    this.selectedCategory = category;
-    this.productService.updateFilters({
-      category: category || undefined,
-    });
-  }
-
-  search(): void {
-    this.productService.updateFilters({
-      search: this.searchQuery || undefined,
-    });
-  }
-
-  resetFilters(): void {
-    this.selectedCategory = null;
-    this.searchQuery = '';
-    this.productService.resetFilters();
   }
 }

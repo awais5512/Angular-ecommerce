@@ -3,26 +3,14 @@
 
   <div *ngIf="!isLoading" class="flex flex-wrap gap-2">
     <button
-      (click)="filterByCategory(null)"
-      class="btn py-1 px-4 rounded-full"
-      [class.bg-primary-500]="selectedCategory === null"
-      [class.text-white]="selectedCategory === null"
-      [class.bg-gray-100]="selectedCategory !== null"
-      [class.hover:bg-gray-200]="selectedCategory !== null"
-    >
-      All
-    </button>
-
-    <button
       *ngFor="let category of categories$ | async"
-      (click)="filterByCategory(category)"
       class="btn py-1 px-4 rounded-full"
-      [class.bg-primary-500]="selectedCategory === category"
-      [class.text-white]="selectedCategory === category"
-      [class.bg-gray-100]="selectedCategory !== category"
-      [class.hover:bg-gray-200]="selectedCategory !== category"
+      [class.bg-primary-700]="selectedCategory === category.name"
+      [class.text-black]="selectedCategory !== category.name"
+      [class.bg-gray-100]="selectedCategory !== category.name"
+      [class.hover:bg-gray-200]="selectedCategory !== category.name"
     >
-      {{ category | titlecase }}
+      {{ category.name | titlecase }}
     </button>
   </div>
 </div>
